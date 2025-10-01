@@ -42,7 +42,7 @@ export default function Home() {
           {/* Main Title with stronger branding */}
           <h1 className="text-6xl md:text-8xl font-serif font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent mb-4">
             yet another{" "}
-            <div className="text-xl mb-4 mt-4">absolutely necessary</div> diary
+            <div className="text-xl mb-4 mt-4">absolutely !necessary</div> diary
           </h1>
 
           {/* Sub-Headline */}
