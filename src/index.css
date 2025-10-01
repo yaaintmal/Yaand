@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @plugin "daisyui" {
-  themes: lofi --default, lofi, abyss, silk, cmyk, wireframe, autumn, bumblebee,
-    pastel;
+  themes: pastel --default, lofi, abyss, silk, cmyk, wireframe, autumn,
+    bumblebee, pastel;
   /* dark --prefersdark; */
 }
 

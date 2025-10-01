@@ -81,15 +81,14 @@ export default function Home() {
               <div className="text-transparent bg-gradient-to-tl from-primary via-second to-info bg-clip-text">
                 <p className="text-lg text-info mt-8 font-light">
                   Take a deep breath, and let's start documenting your journey
-                  with ma lil diary - THE safe place to write and share your
-                  thoughts.
+                  with ma lil diary - THE safe place to write and share.
                 </p>
               </div>
             </div>
 
             {/* Enhanced CTA Button */}
             <div className="flex justify-center">
-              <div className="card-actions lg:justify-start mt-4">
+              <div className="card-actions lg:justify-start ">
                 <Link
                   to="/newentry"
                   className="btn btn-primary btn-lg shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-transform duration-300 "
@@ -100,7 +99,7 @@ export default function Home() {
             </div>
 
             {/* Secondary Feature Highlight */}
-            <div className="mt-12 text-sm text-info/80 flex items-center justify-center lg:justify-start space-x-2">
+            <div className="mt-8 text-sm text-info/80 flex items-center justify-center lg:justify-start space-x-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
