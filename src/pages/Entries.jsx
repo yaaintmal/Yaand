@@ -1,6 +1,55 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
-// Mock component for a single diary entry item
+// --- Date Utility Functions ---
+
+/**
+ * Calculates the start date of the current week (Sunday).
+ * @returns {Date} The date object for the start of the week.
+ */
+const getStartOfWeek = () => {
+  const now = new Date();
+  const day = now.getDay(); // 0 for Sunday, 6 for Saturday
+  const diff = now.getDate() - day; // Adjust date to Sunday
+  const start = new Date(now.setDate(diff));
+  start.setHours(0, 0, 0, 0); // Set time to start of day
+  return start;
+};
+
+/**
+ * Calculates the start date of the last week (Sunday).
+ * @returns {Date} The date object for the start of the last week.
+ */
+const getStartOfLastWeek = () => {
+  const startOfThisWeek = getStartOfWeek();
+  // Subtract 7 days (7 * 24 * 60 * 60 * 1000 milliseconds)
+  const lastWeekTimestamp = startOfThisWeek.getTime() - 7 * 24 * 60 * 60 * 1000;
+  return new Date(lastWeekTimestamp);
+};
+
+/**
+ * Calculates the start date of the current month.
+ * @returns {Date} The date object for the first day of the month.
+ */
+const getStartOfMonth = () => {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), now.getMonth(), 1);
+  start.setHours(0, 0, 0, 0); // Set time to start of day
+  return start;
+};
+
+/**
+ * Calculates the start date of the last month.
+ * @returns {Date} The date object for the first day of the last month.
+ */
+const getStartOfLastMonth = () => {
+  const now = new Date();
+  // Go to the first day of the current month, then subtract one month
+  const start = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  start.setHours(0, 0, 0, 0); // Set time to start of day
+  return start;
+};
+
+// Mock component for a single diary entry item (NO CHANGES)
 const EntryItem = ({ title, date, isGoodDay, index }) => {
   // using us format to display the day item in bigger font / whole app is in english tho'
   const dateFormatted = new Date(date).toLocaleDateString("en-US", {
@@ -70,13 +119,13 @@ const EntryItem = ({ title, date, isGoodDay, index }) => {
   );
 };
 
-// **Timeline Icon Component** (Reused from DaisyUI example)
+// **Timeline Icon Component** (NO CHANGES)
 const TimelineIcon = ({ isGoodDay }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 20 20"
     fill="currentColor"
-    className={`h-5 w-5 ${isGoodDay ? "text-error" : "text-primary/80"}`} // Used 80% opacity on primary for less intense color
+    className={`h-5 w-5 ${isGoodDay ? "text-error" : "text-primary/80"}`}
   >
     <path
       fillRule="evenodd"
@@ -87,7 +136,6 @@ const TimelineIcon = ({ isGoodDay }) => (
 );
 
 export default function Entries() {
-  // Use a more descriptive name for 'isLiked' in the mock data
   const mockEntries = [
     {
       id: 1,
@@ -125,37 +173,124 @@ export default function Entries() {
       date: "2025-09-28",
       isGoodDay: true,
     },
+    {
+      id: 7,
+      title: "BVB 🖤💛 owned :3 in CL",
+      date: "2025-10-01",
+      isGoodDay: true,
+    },
   ];
 
-  const [filter, setFilter] = useState("all"); // all, month, week, liked
+  // State is an array to hold multiple active filters (e.g., ['liked', 'lastWeek'])
+  const [activeFilters, setActiveFilters] = useState([]);
 
-  const handleFilterClick = (filter) => {
-    setFilter(filter);
+  // Handler to toggle filters
+  const handleFilterClick = (filterName) => {
+    setActiveFilters((prevFilters) => {
+      // If the filter is 'all', always set the array to empty, effectively selecting 'all'
+      if (filterName === "all") {
+        return [];
+      }
+      // If the filter is already present, remove it
+      if (prevFilters.includes(filterName)) {
+        return prevFilters.filter((f) => f !== filterName);
+      }
+      // Otherwise, add it
+      return [...prevFilters, filterName];
+    });
   };
 
-  const filterButtonClasses = (currentFilter) =>
-    `btn btn-sm text-xs md:text-sm shadow-md transition-all duration-300 ${
-      filter === currentFilter
-        ? "btn-primary"
-        : "btn-ghost border border-base-300 hover:bg-base-300/50 text-base-content/80" // Changed neutral-content to base-content
-    }`;
+  // Update button styling to check if the filter is present in the array
+  const filterButtonClasses = (currentFilter) => {
+    // If no filters are active, 'all' is implicitly selected
+    const isActive =
+      currentFilter === "all"
+        ? activeFilters.length === 0
+        : activeFilters.includes(currentFilter);
 
-  // Filter entries
-  const filteredEntries = mockEntries.filter((entry) => {
-    if (filter === "liked") return entry.isGoodDay;
-    // Add more filtering logic here (week, month, etc.)
-    return true;
-  });
+    return `btn btn-sm text-xs md:text-sm shadow-md transition-all duration-300 ${
+      isActive
+        ? "btn-primary"
+        : "btn-ghost border border-base-300 hover:bg-base-300/50 text-base-content/80"
+    }`;
+  };
+
+  // REFACTORED FILTERING LOGIC
+  const filteredEntries = useMemo(() => {
+    // If no filters are active, return all entries
+    if (activeFilters.length === 0) {
+      return mockEntries.map((entry) => ({
+        ...entry,
+        timestamp: new Date(entry.date).getTime(),
+      }));
+    }
+
+    const entriesWithTimestamp = mockEntries.map((entry) => ({
+      ...entry,
+      timestamp: new Date(entry.date).getTime(),
+    }));
+
+    // Get time boundaries
+    const todayTimestamp = new Date().getTime();
+
+    // Boundaries for "This Week/Month" (end boundary for "Last Week/Month")
+    const startOfThisWeekTimestamp = getStartOfWeek().getTime();
+    const startOfThisMonthTimestamp = getStartOfMonth().getTime();
+
+    // Boundaries for "Last Week/Month"
+    const startOfLastWeekTimestamp = getStartOfLastWeek().getTime();
+    const startOfLastMonthTimestamp = getStartOfLastMonth().getTime();
+
+    return entriesWithTimestamp.filter((entry) => {
+      // An entry must pass ALL active filters (AND logic)
+      return activeFilters.every((filter) => {
+        switch (filter) {
+          case "liked":
+            return entry.isGoodDay;
+
+          case "week":
+            // Entries from start of this week up to now
+            return (
+              entry.timestamp >= startOfThisWeekTimestamp &&
+              entry.timestamp <= todayTimestamp
+            );
+
+          case "lastWeek":
+            // Entries from start of last week up to start of this week (non-inclusive)
+            return (
+              entry.timestamp >= startOfLastWeekTimestamp &&
+              entry.timestamp < startOfThisWeekTimestamp
+            );
+
+          case "month":
+            // Entries from start of this month up to now
+            return (
+              entry.timestamp >= startOfThisMonthTimestamp &&
+              entry.timestamp <= todayTimestamp
+            );
+
+          case "lastMonth":
+            // Entries from start of last month up to start of this month (non-inclusive)
+            return (
+              entry.timestamp >= startOfLastMonthTimestamp &&
+              entry.timestamp < startOfThisMonthTimestamp
+            );
+
+          default:
+            return true;
+        }
+      });
+    });
+  }, [activeFilters, mockEntries]);
 
   // Sort entries by date (ascending) for the timeline visualization
-  // Create a copy to avoid mutating the original array
   const timelineEntries = [...filteredEntries].sort(
-    (a, b) => new Date(a.date) - new Date(b.date)
+    (a, b) => a.timestamp - b.timestamp
   );
 
-  // Sort entries for the list (descending) - Reversing is a quick way to do this
+  // Sort entries for the list (descending)
   const listEntries = [...filteredEntries].sort(
-    (a, b) => new Date(b.date) - new Date(a.date)
+    (a, b) => b.timestamp - a.timestamp
   );
 
   return (
@@ -169,10 +304,9 @@ export default function Entries() {
       </p>
 
       {/* --- Filter and Sort Section - Clean Capsule Style --- */}
-      {/* Changed bg-info/33 to bg-base-300/60 for better neutrality */}
       <div className="flex flex-wrap gap-2 justify-center p-4 bg-base-300/60 rounded-2xl shadow-inner mt-4 mb-8">
         <span className="text-sm font-semibold mr-2 self-center text-accent hidden sm:inline">
-          Browse by
+          Filter by
         </span>
         <button
           className={filterButtonClasses("all")}
@@ -187,10 +321,22 @@ export default function Entries() {
           This Week
         </button>
         <button
+          className={filterButtonClasses("lastWeek")}
+          onClick={() => handleFilterClick("lastWeek")}
+        >
+          Last Week
+        </button>
+        <button
           className={filterButtonClasses("month")}
           onClick={() => handleFilterClick("month")}
         >
           This Month
+        </button>
+        <button
+          className={filterButtonClasses("lastMonth")}
+          onClick={() => handleFilterClick("lastMonth")}
+        >
+          Last Month
         </button>
         <button
           className={filterButtonClasses("liked")}
@@ -199,6 +345,7 @@ export default function Entries() {
           Good Days 🎉
         </button>
       </div>
+      {/* --- END Filter Section --- */}
 
       {/* --- Dynamic Timeline Section --- */}
       <ul className="timeline timeline-vertical">
@@ -218,7 +365,7 @@ export default function Entries() {
               <div
                 className={
                   isStart
-                    ? "timeline-start timeline-box bg-base-200/70 shadow-md text-sm font-medium p-3 hover:bg-base-300 transition-colors cursor-pointer" // Used base-200/70 for better contrast against page background (base-100)
+                    ? "timeline-start timeline-box bg-base-200/70 shadow-md text-sm font-medium p-3 hover:bg-base-300 transition-colors cursor-pointer"
                     : "timeline-end timeline-box bg-base-200/70 shadow-md text-sm font-medium p-3 hover:bg-base-300 transition-colors cursor-pointer"
                 }
               >
@@ -249,7 +396,7 @@ export default function Entries() {
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                className="h-6 w-6 text-accent animate-pulse" // Accent is usually high-contrast
+                className="h-6 w-6 text-accent animate-pulse"
               >
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
               </svg>
@@ -260,10 +407,10 @@ export default function Entries() {
           </li>
         )}
       </ul>
+      {/* --- END Dynamic Timeline Section --- */}
 
       {/* --- Entries List Container --- */}
       <div className="min-h-[50vh] mt-8">
-        {/* Text changed from 'text-info/69' to base-content/70 for better contrast */}
         <div className="p-4 pb-2 text-xs uppercase font-bold tracking-wider text-base-content/70 border-b border-base-300 mb-4">
           Showing {listEntries.length} Recorded Memories
         </div>
@@ -275,8 +422,8 @@ export default function Entries() {
                 key={entry.id}
                 title={entry.title}
                 date={entry.date}
-                isGoodDay={entry.isGoodDay} // Passing the mood data
-                index={index} // Note: Index here is for display count, not chronological order
+                isGoodDay={entry.isGoodDay}
+                index={index}
               />
             ))
           ) : (
