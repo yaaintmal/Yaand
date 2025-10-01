@@ -68,16 +68,10 @@ export default function Home() {
             </h2>
             <div className="space-y-4 mb-8 text-transparent bg-gradient-to-br from-primary via-second to-info bg-clip-text text-justify">
               <p>
-                This little space, built using React, is designed just for you.
-                Think of it as a 'quiet corner of the internet' where you can
-                gather your thoughts.
-              </p>
-              <p>
                 It's simple, private, and ready whenever inspiration strikes.
                 Track your progress, or just jot down the moments of your day
                 without any pressure.
               </p>
-
               <div className="text-transparent bg-gradient-to-tl from-primary via-second to-info bg-clip-text">
                 <p className="text-lg text-info mt-8 font-light">
                   Take a deep breath, and let's start documenting your journey
