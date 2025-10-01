@@ -1,139 +1,121 @@
-import { Link } from "react-router";
+// Conceptual Home.jsx Refactor
+
+import React from "react";
+import { Link } from "react-router"; // Assuming you use react-router-dom
+
+// NOTE: You would replace this section with your actual content/image source.
+// This is a placeholder for the visual illustration.
+const DiaryIllustration = () => (
+  <div className="flex justify-center items-center p-6 lg:p-10">
+    {/* This div is a placeholder for your 'grafik.png' diary icon */}
+    {/* Applying a subtle bounce/pulse effect can make it feel alive */}
+    <div className="w-48 h-48 lg:w-64 lg:h-64 bg-primary/20 rounded-2xl shadow-xl border-4 border-primary/50 flex justify-center items-center transform hover:scale-105 transition-transform duration-500 animate-pulse-slow">
+      {/* Replace with your actual SVG or Image component */}
+      <span className="text-6xl">📑</span>
+    </div>
+  </div>
+);
 
 export default function Home() {
   return (
-    // Adopted padding from Entries.jsx
-    // **Refinement for Mobile:** Switched to `p-3 sm:p-4` for tighter mobile padding.
-    // Use base-content for all text by default
-    <div className="p-3 sm:p-4 text-base-content">
-      {/* Adopted heading style from Entries.jsx */}
-      {/* **Refinement for Mobile:** Reduced heading size on small screens (`text-2xl sm:text-3xl`). */}
-      <h2 className="text-2xl sm:text-3xl font-serif text-primary mb-6 sm:mb-8 border-b border-primary/20 pb-2">
-        Welcome to ma lil diary
-      </h2>
-      <p className="text-right text-info text-xs mb-4 sm:mb-6 uppercase font-light">
-        start your personal own digital journal
-      </p>
+    <div className="p-4 md:p-12 text-base-content min-h-screen">
+      {/* --- Top Header/Nav Accent --- */}
+      <div className="flex justify-end mb-8">
+        <span className="badge badge-lg badge-outline badge-primary font-light tracking-widest uppercase">
+          your own digital journal
+        </span>
+      </div>
 
-      {/* Main content container, adopting min-height convention */}
-      <div className="">
-        {/* Use bg-base-200/50 for a background that contrasts well with base-100 */}
-        {/* **Refinement for Mobile:** Reduced padding on small screens (`p-4 sm:p-6`). */}
-        <div className="hero bg-base-200/50 rounded-xl p-4 sm:p-6 shadow-xl border border-base-300">
-          <div className="hero-content flex-col w-full">
-            {/* Heading should use primary color */}
-            {/* **Refinement for Mobile:** Reduced heading size on small screens (`text-4xl sm:text-5xl`). */}
-            <h2 className="text-4xl sm:text-5xl font-bold text-center mb-4 text-transparent bg-gradient-to-br from-primary via-second to-info bg-clip-text">
-              ma lil diary
+      {/* --- Main Content Area: Two-Column Layout on Large Screens --- */}
+      <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 mt-10">
+        {/* LEFT COLUMN: Illustration and Branding */}
+        <div className="lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left">
+          {/* Main Title with stronger branding */}
+          <h1 className="text-6xl md:text-8xl font-serif font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent mb-4">
+            yet another{" "}
+            <div className="text-xl mb-4 mt-4">absolutely necessary</div> diary
+          </h1>
+
+          {/* Sub-Headline */}
+          <p className="text-xl md:text-2xl text-base-content/80 mb-6">
+            Your private corner of the internet, built just for you.
+          </p>
+
+          {/* Animated Illustration */}
+          <DiaryIllustration />
+
+          <p className="text-sm mt-4 text-base-content/60 max-w-sm mx-auto lg:mx-0">
+            It's simple, private, and ready whenever inspiration strikes. Track
+            your progress, or just jot down the moments of your day without any
+            pressure.
+          </p>
+        </div>
+
+        {/* RIGHT COLUMN: Value Proposition and CTA */}
+        <div className="lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left mt-12">
+          <div className="card w-full bg-base-100 shadow-2xl p-6 md:p-10 border border-base-300">
+            <h2 className="card-title text-3xl text-primary mb-4 self-center lg:self-start mb-8">
+              Welcome to ma lil diary
             </h2>
+            <div className="space-y-4 mb-8 text-transparent bg-gradient-to-br from-primary via-second to-info bg-clip-text text-justify">
+              <p>
+                This little space, built using React, is designed just for you.
+                Think of it as a 'quiet corner of the internet' where you can
+                gather your thoughts.
+              </p>
+              <p>
+                It's simple, private, and ready whenever inspiration strikes.
+                Track your progress, or just jot down the moments of your day
+                without any pressure.
+              </p>
 
-            {/* --- Text Block 1 (Above Image) --- */}
-            {/* Text should use base-content for readability */}
-            {/* **Refinement for Mobile:** Reduced vertical padding/margins (`py-2 px-0 sm:py-3 sm:px-4`). */}
-            <p className="text-sm text-center max-w-xl mx-auto py-2 px-0 sm:py-3 sm:px-4 text-base-content">
-              Welcome to ma lil diary, your **personal own digital journal**
-              <br /> <br /> This little space, built using React, is designed
-              just for you. Think of it as a quiet corner of the internet where
-              you can gather your thoughts, track your progress, or just jot
-              down the moments of your day without any pressure.
-            </p>
-            {/* --- Image Section (Centered, Dynamic Effect) --- */}
-            {/* **Refinement for Mobile:** Reduced vertical margin (`my-4 sm:my-6`). */}
-            <div className="flex justify-center my-4 sm:my-6">
-              {/* Added `w-full` and `h-auto` to the container and set a smaller max width for all screens */}
-              <div class="container max-w-[250px] transition-all duration-700 hover:scale-[1.03] hover:shadow-primary/50 hover:rotate-1 w-full h-auto">
-                <svg
-                  // **Refinement for Mobile:** Set `width` and `height` to 100% to fill the max-width container
-                  viewBox="0 0 350 400"
-                  width="100%"
-                  height="100%"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <title>Diary/Journal Graphic</title>
-
-                  <g transform="rotate(-5 175 200)">
-                    <rect
-                      x="55"
-                      y="55"
-                      width="230"
-                      height="280"
-                      rx="10"
-                      fill="#FFFFFF"
-                    />
-
-                    <rect
-                      x="50"
-                      y="50"
-                      width="20"
-                      height="290"
-                      rx="5"
-                      fill="#4C1D95"
-                    />
-
-                    <rect
-                      x="50"
-                      y="50"
-                      width="240"
-                      height="290"
-                      rx="10"
-                      fill="#6D28D9"
-                    />
-
-                    <rect
-                      x="70"
-                      y="70"
-                      width="210"
-                      height="250"
-                      rx="8"
-                      fill="#8B5CF6"
-                    />
-
-                    <g fill="#D5BBFF">
-                      <rect x="85" y="90" width="180" height="6" rx="3" />
-                      <rect x="85" y="110" width="160" height="6" rx="3" />
-                      <rect x="85" y="130" width="175" height="6" rx="3" />
-                      <rect x="85" y="150" width="185" height="6" rx="3" />
-                      <rect x="85" y="170" width="150" height="6" rx="3" />
-                    </g>
-
-                    <g
-                      transform="translate(220, 270) scale(1.5)"
-                      fill="#FACC15"
-                    >
-                      <path d="M9.702 14.397L13 16.5L12.012 12.87L15.012 10.37L11.397 10.053L9.702 6.5L8.007 10.053L4.392 10.37L7.392 12.87L6.404 16.5L9.702 14.397Z" />
-                    </g>
-                  </g>
-                </svg>
+              <div className="text-transparent bg-gradient-to-tl from-primary via-second to-info bg-clip-text">
+                <p className="text-lg text-info mt-8 font-light">
+                  Take a deep breath, and let's start documenting your journey
+                  with ma lil diary - THE safe place to write and share your
+                  thoughts.
+                </p>
               </div>
             </div>
 
-            {/* --- Text Block 2 (Below Image, creating the "flow around" effect) --- */}
-            {/* **Refinement for Mobile:** Reduced vertical padding/margins (`py-2 px-0 sm:py-2 sm:px-4`). */}
-            <p className="text-sm text-center max-w-xl mx-auto py-2 px-0 sm:py-2 sm:px-4 text-base-content">
-              It's simple, private, and ready whenever inspiration strikes.
-              <br />
-              Take a deep breath, and let's start **documenting your journey**
-              with ma lil diary - a safe place to write and share your thoughts.
-            </p>
+            {/* Enhanced CTA Button */}
+            <div className="flex justify-center">
+              <div className="card-actions lg:justify-start mt-4">
+                <Link
+                  to="/newentry"
+                  className="btn btn-primary btn-lg shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-transform duration-300 "
+                >
+                  ✍️ Add an Entry Now
+                </Link>
+              </div>
+            </div>
 
-            {/* --- Action Button --- */}
-            {/* **Refinement for Mobile:** Reduced top margin (`mt-4 sm:mt-6`). */}
-            <div className="mt-4 sm:mt-6 text-center">
-              <Link to="/newentry">
-                <button className="btn btn-primary shadow-lg max-w-fit">
-                  add an entry
-                </button>
-              </Link>
+            {/* Secondary Feature Highlight */}
+            <div className="mt-12 text-sm text-info/80 flex items-center justify-center lg:justify-start space-x-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
+                />
+              </svg>
+              <span className="font-medium">
+                All data is stored securely in your browser's LocalStorage.
+              </span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Adopted simplified breadcrumbs style from Entries.jsx */}
-      {/* Use base-content/opacity for text that fades */}
-      {/* **Refinement for Mobile:** Reduced top margin (`mt-6 sm:mt-8`). */}
-      <div className="text-xs text-base-content opacity-50 mt-6 sm:mt-8 text-center">
+      {/* --- Footer Breadcrumbs --- */}
+      <div className="text-xs opacity-50 mt-20 text-center">
         Home / Overview
       </div>
     </div>

@@ -1,11 +1,7 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useContext } from "react";
+import { EntriesContext } from "../context/EntriesContext"; // Import Context
 
-// --- Date Utility Functions ---
-
-/**
- * Calculates the start date of the current week (Sunday).
- * @returns {Date} The date object for the start of the week.
- */
+// --- Date Utility Functions (Keep as is) ---
 const getStartOfWeek = () => {
   const now = new Date();
   const day = now.getDay(); // 0 for Sunday, 6 for Saturday
@@ -15,10 +11,6 @@ const getStartOfWeek = () => {
   return start;
 };
 
-/**
- * Calculates the start date of the last week (Sunday).
- * @returns {Date} The date object for the start of the last week.
- */
 const getStartOfLastWeek = () => {
   const startOfThisWeek = getStartOfWeek();
   // Subtract 7 days (7 * 24 * 60 * 60 * 1000 milliseconds)
@@ -26,10 +18,6 @@ const getStartOfLastWeek = () => {
   return new Date(lastWeekTimestamp);
 };
 
-/**
- * Calculates the start date of the current month.
- * @returns {Date} The date object for the first day of the month.
- */
 const getStartOfMonth = () => {
   const now = new Date();
   const start = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -37,10 +25,6 @@ const getStartOfMonth = () => {
   return start;
 };
 
-/**
- * Calculates the start date of the last month.
- * @returns {Date} The date object for the first day of the last month.
- */
 const getStartOfLastMonth = () => {
   const now = new Date();
   // Go to the first day of the current month, then subtract one month
@@ -49,8 +33,9 @@ const getStartOfLastMonth = () => {
   return start;
 };
 
-// Mock component for a single diary entry item (NO CHANGES)
-const EntryItem = ({ title, date, isGoodDay, index }) => {
+// Mock component for a single diary entry item
+// REFAC: Added 'id' and 'updateEntry', removed internal 'liked' state, uses 'isGoodDay' directly.
+const EntryItem = ({ id, title, date, isGoodDay, index, updateEntry }) => {
   // using us format to display the day item in bigger font / whole app is in english tho'
   const dateFormatted = new Date(date).toLocaleDateString("en-US", {
     month: "long",
@@ -58,11 +43,8 @@ const EntryItem = ({ title, date, isGoodDay, index }) => {
   });
   const year = new Date(date).getFullYear();
 
-  // State for internal entry liking (for demo purposes)
-  const [liked, setLiked] = useState(isGoodDay);
-
-  // Determine the mood icon and color based on the entry's mood (isGoodDay/liked)
-  const moodIcon = liked ? (
+  // Determine the mood icon and color based on the entry's mood (isGoodDay)
+  const moodIcon = isGoodDay ? (
     <span className="text-xl text-error transition-transform duration-300 hover:scale-125">
       ❤️
     </span>
@@ -72,11 +54,16 @@ const EntryItem = ({ title, date, isGoodDay, index }) => {
     </span>
   );
 
+  // Handler for the like/unlike button
+  const handleLikeToggle = () => {
+    // Call the context function to update the entry's isGoodDay state
+    updateEntry(id, { isGoodDay: !isGoodDay });
+  };
+
   return (
     // Replaced 'bg-white/70' with 'bg-base-100/70' for theme adaptation
     <li className="p-4 bg-base-100/70 backdrop-blur-sm rounded-xl shadow-md hover:shadow-lg blur-[2.5px] hover:blur-none transition-all duration-450 flex items-start justify-between border-l-4 border-primary/50 mb-3">
       {/* Date and Index (Left Side) */}
-      {/* Used base-content for text and primary/info for gradients */}
       <div className="flex flex-col items-center justify-center w-16 h-full text-center pr-4 border-r border-base-300 mr-4">
         <div className="text-sm font-semibold uppercase text-transparent tracking-wider bg-gradient-to-b from-base-content/60 to-info bg-clip-text">
           {dateFormatted.split(" ")[0].substring(0, 3)}
@@ -101,11 +88,11 @@ const EntryItem = ({ title, date, isGoodDay, index }) => {
 
       {/* Actions and Mood (Right Side) */}
       <div className="flex flex-col items-end space-y-2 ml-4">
-        {/* Mood/Like Toggle - Replicating the 'Was a good day' switch feel */}
+        {/* Mood/Like Toggle - Uses handleLikeToggle to update context */}
         <button
           className="btn btn-ghost btn-circle btn-sm p-0"
-          onClick={() => setLiked(!liked)}
-          aria-label={liked ? "Mark as bad day" : "Mark as good day"}
+          onClick={handleLikeToggle}
+          aria-label={isGoodDay ? "Mark as bad day" : "Mark as good day"}
         >
           {moodIcon}
         </button>
@@ -136,50 +123,8 @@ const TimelineIcon = ({ isGoodDay }) => (
 );
 
 export default function Entries() {
-  const mockEntries = [
-    {
-      id: 1,
-      title: "Day 1: back to reset... a new beginning",
-      date: "2025-01-01",
-      isGoodDay: false,
-    },
-    {
-      id: 2,
-      title: "A Great Movie Night with Popcorn and Friends",
-      date: "2025-02-01",
-      isGoodDay: true,
-    },
-    {
-      id: 3,
-      title: "The Weirdest Dream Ever, About Flying Pizzas",
-      date: "2025-03-04",
-      isGoodDay: true,
-    },
-    {
-      id: 4,
-      title: "Finally Finished that Challenging School Project!",
-      date: "2025-05-06",
-      isGoodDay: true,
-    },
-    {
-      id: 5,
-      title: "A Rainy Afternoon and Cozy Reading Time",
-      date: "2025-08-09",
-      isGoodDay: false,
-    },
-    {
-      id: 6,
-      title: "Started to use DaisyUI and React... kinda each day... is fun :3",
-      date: "2025-09-28",
-      isGoodDay: true,
-    },
-    {
-      id: 7,
-      title: "BVB 🖤💛 owned :3 in CL",
-      date: "2025-10-01",
-      isGoodDay: true,
-    },
-  ];
+  // 1. Consume the entries state and the new updateEntry function from context
+  const { entries: allEntries, updateEntry } = useContext(EntriesContext);
 
   // State is an array to hold multiple active filters (e.g., ['liked', 'lastWeek'])
   const [activeFilters, setActiveFilters] = useState([]);
@@ -217,15 +162,15 @@ export default function Entries() {
 
   // REFACTORED FILTERING LOGIC
   const filteredEntries = useMemo(() => {
-    // If no filters are active, return all entries
+    // 2. Use allEntries from Context instead of mockEntries
     if (activeFilters.length === 0) {
-      return mockEntries.map((entry) => ({
+      return allEntries.map((entry) => ({
         ...entry,
         timestamp: new Date(entry.date).getTime(),
       }));
     }
 
-    const entriesWithTimestamp = mockEntries.map((entry) => ({
+    const entriesWithTimestamp = allEntries.map((entry) => ({
       ...entry,
       timestamp: new Date(entry.date).getTime(),
     }));
@@ -281,7 +226,8 @@ export default function Entries() {
         }
       });
     });
-  }, [activeFilters, mockEntries]);
+    // 3. Add allEntries to dependencies
+  }, [activeFilters, allEntries]);
 
   // Sort entries by date (ascending) for the timeline visualization
   const timelineEntries = [...filteredEntries].sort(
@@ -418,12 +364,15 @@ export default function Entries() {
         <ul className="space-y-4">
           {listEntries.length > 0 ? (
             listEntries.map((entry, index) => (
+              // REFAC: Pass entry.id and updateEntry function
               <EntryItem
                 key={entry.id}
+                id={entry.id}
                 title={entry.title}
                 date={entry.date}
                 isGoodDay={entry.isGoodDay}
                 index={index}
+                updateEntry={updateEntry}
               />
             ))
           ) : (
