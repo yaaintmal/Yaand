@@ -21,9 +21,18 @@ export default function Home() {
     <div className="p-4 md:p-12 text-base-content min-h-screen">
       {/* --- Top Header/Nav Accent --- */}
       <div className="flex justify-end mb-8">
-        <span className="badge badge-lg badge-outline badge-primary font-light tracking-widest uppercase">
-          your own digital journal
-        </span>
+        {/* render two div conditionally (a or b) if screensize is less then 420px width */}
+        <div className="hidden md:block">
+          <span className="badge badge-lg badge-outline badge-primary font-light tracking-widest uppercase">
+            your personal own digital journal
+          </span>
+        </div>
+        {/* render a div conditionally if screensize is bigger then 420px width */}
+        <div className="md:hidden">
+          <span className="badge badge-lg badge-outline badge-primary font-light tracking-widest uppercase">
+            your own journal
+          </span>
+        </div>
       </div>
 
       {/* --- Main Content Area: Two-Column Layout on Large Screens --- */}
