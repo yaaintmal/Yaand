@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@plugin "daisyui" {
+  themes: lofi --default, silk, cmyk, autumn, bumblebee, pastel;
+  /* dark --prefersdark; */
+}
+
+.instructions-container {
+  * {
+    all: revert;
+  }
+}
+
+/* adding the usual initial full reset */
+
+.hover-flip:hover .swap-off {
+  transform: rotateY(-180deg);
+  opacity: 0;
+}
+
+.hover-flip:hover .swap-on {
+  transform: rotateY(0deg);
+  opacity: 1;
+}
