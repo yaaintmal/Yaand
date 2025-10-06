@@ -1,5 +1,17 @@
-import { useState, useContext } from "react";
-import { EntriesContext } from "../context/EntriesContext"; // Import Context
+import { useState, useContext, useEffect } from "react";
+import { EntriesContext } from "../context/EntriesContext";
+
+// helperfunction for slug
+
+const slugify = (text) => {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim() // Entferne Leerzeichen am Anfang und Ende
+    .replace(/\s+/g, "-") // Ersetze Leerzeichen durch Bindestriche
+    .replace(/[^\w\-]+/g, "") // Entferne alle nicht-Wortzeichen außer Bindestriche
+    .replace(/\-\-+/g, "-"); // Ersetze mehrfache Bindestriche durch einen einzelnen
+};
 
 export default function NewEntry() {
   // Use context to get the function to save new entries
@@ -12,23 +24,25 @@ export default function NewEntry() {
   const [impression, setImpression] = useState("");
   const [isSaved, setIsSaved] = useState(false); // To show success message
 
+  useEffect(() => {
+    // Generiere den Slug immer neu, wenn sich der Titel ändert
+    setSlug(slugify(title));
+  }, [title]); // Abhängigkeit: Läuft bei jeder Änderung von 'title'
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // 1. Create the new entry object
     const newEntry = {
       title,
-      slug,
+      slug, // 'slug' wird jetzt automatisch aktualisiert
       isGoodDay,
       impression,
     };
 
-    // 2. Add to global state and localStorage via Context
     addEntry(newEntry);
 
-    // 3. Reset form and show success
     setTitle("");
-    setSlug("");
+    setSlug(""); // important for slug generation
     setImpression("");
     setIsGoodDay(true);
     setIsSaved(true);
@@ -92,7 +106,9 @@ export default function NewEntry() {
               className="input input-bordered w-full mb-6"
               placeholder="any-awesome-slug"
               value={slug}
-              onChange={(e) => setSlug(e.target.value)}
+              // onChange-Handler removed as it's now read-only
+              readOnly
+              disabled // our slug is now read-only
             />
           </fieldset>
 
