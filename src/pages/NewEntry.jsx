@@ -101,15 +101,16 @@ export default function NewEntry() {
               required
             />
             <label className="label text-left font-medium">Slug</label>
-            <input
+            <p className="text-xs text-left text-accent opacity-69">{slug}</p>
+            {/* <input
               type="text"
-              className="input input-bordered w-full mb-6"
+              className="input input-xs input-bordered w-full mb-6"
               placeholder="any-awesome-slug"
               value={slug}
               // onChange-Handler removed as it's now read-only
               readOnly
               disabled // our slug is now read-only
-            />
+            /> */}
           </fieldset>
 
           <fieldset className="fieldset mt-6">
