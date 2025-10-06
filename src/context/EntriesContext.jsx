@@ -1,4 +1,3 @@
-// fileName: EntriesContext.jsx
 import React, { createContext, useState, useEffect, useCallback } from "react";
 
 // key to store entries in localStorage
@@ -10,7 +9,7 @@ const loadEntries = () => {
   try {
     const serializedState = localStorage.getItem(STORAGE_KEY);
     if (serializedState === null) {
-      // Use mock data for first-time load if necessary, or just return an empty array
+      // Use mock data for first-time load if necessary, or just return an empty array // REFAC: mock data for first-time load / remove, refac
       // Returning empty array for pure local storage implementation
       return [];
     }
@@ -25,7 +24,6 @@ const loadEntries = () => {
 const saveEntries = (entries) => {
   // ... (saveEntries function remains the same)
   try {
-    // Serialize the array into a JSON string.
     const serializedState = JSON.stringify(entries);
     localStorage.setItem(STORAGE_KEY, serializedState);
   } catch (err) {
@@ -54,7 +52,7 @@ export const EntriesProvider = ({ children }) => {
     setEntries((prevEntries) => {
       const newEntry = {
         ...newEntryData,
-        id: Date.now() + Math.random(), // Simple unique ID
+        id: Date.now() + Math.random(), // Simple unique ID / REFAC
         date: new Date().toISOString().split("T")[0], // YYYY-MM-DD format
       };
 
@@ -62,7 +60,7 @@ export const EntriesProvider = ({ children }) => {
     });
   }, []);
 
-  // 👇 NEW FUNCTION: To update an existing entry
+  // NEW FUNCTION: To update an existing entry
   const updateEntry = useCallback((id, updatedData) => {
     setEntries((prevEntries) =>
       prevEntries.map((entry) =>
@@ -70,7 +68,6 @@ export const EntriesProvider = ({ children }) => {
       )
     );
   }, []);
-  // 👆 END NEW FUNCTION
 
   // Pass state and functions through the context value
   const contextValue = {

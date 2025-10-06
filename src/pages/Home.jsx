@@ -1,5 +1,3 @@
-// Conceptual Home.jsx Refactor
-
 import React from "react";
 import { Link } from "react-router"; // Assuming you use react-router-dom
 
@@ -36,9 +34,9 @@ export default function Home() {
       </div>
 
       {/* --- Main Content Area: Two-Column Layout on Large Screens --- */}
-      <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 mt-10">
+      <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12 mt-12">
         {/* LEFT COLUMN: Illustration and Branding */}
-        <div className="lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left">
+        <div className="lg:w-1/2 lg:h-screen flex flex-col items-center lg:items-start text-center lg:text-left">
           {/* Main Title with stronger branding */}
           <h1 className="text-6xl md:text-8xl font-serif font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent mb-4">
             yet another{" "}
@@ -46,25 +44,25 @@ export default function Home() {
           </h1>
 
           {/* Sub-Headline */}
-          <p className="text-xl md:text-2xl text-base-content/80 mb-6">
+          <p className="text-xl md:text-2xl text-base-content/80">
             Your private corner of the internet, built just for you.
           </p>
 
           {/* Animated Illustration */}
           <DiaryIllustration />
 
-          <p className="text-sm mt-4 text-base-content/60 max-w-sm mx-auto lg:mx-0">
+          {/* <p className="text-sm mt-4 text-base-content/60 max-w-sm mx-auto lg:mx-0">
             It's simple, private, and ready whenever inspiration strikes. Track
             your progress, or just jot down the moments of your day without any
             pressure.
-          </p>
+          </p> */}
         </div>
 
         {/* RIGHT COLUMN: Value Proposition and CTA */}
         <div className="lg:w-1/2 flex flex-col items-center lg:items-start text-center lg:text-left mt-12">
           <div className="card w-full bg-base-100 shadow-2xl p-6 md:p-10 border border-base-300">
-            <h2 className="card-title text-3xl text-primary mb-4 self-center lg:self-start mb-8">
-              Welcome to ma lil diary
+            <h2 className="card-title text-3xl text-primary self-center lg:self-start mb-8">
+              Welcome to Yaand!
             </h2>
             <div className="space-y-4 mb-8 text-transparent bg-gradient-to-br from-primary via-second to-info bg-clip-text text-justify">
               <p>

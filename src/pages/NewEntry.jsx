@@ -85,7 +85,7 @@ export default function NewEntry() {
         {/* Form Container for New Entry */}
         <form
           onSubmit={handleSubmit}
-          className="bg-white/70 backdrop-blur-sm rounded-xl shadow-xl p-6 border border-base-300 mx-auto max-w-2xl"
+          className="bg-zinc-900/50 backdrop-blur-sm rounded-xl shadow-xl p-6 border border-base-300 mx-auto max-w-2xl"
         >
           <fieldset className="fieldset text-right">
             <legend className="text-xl font-bold text-primary mb-4">
@@ -94,7 +94,7 @@ export default function NewEntry() {
             <label className="label text-left font-medium">Title</label>
             <input
               type="text"
-              className="input input-bordered w-full mb-3"
+              className="input input-bordered w-full mb-3 text-primary"
               placeholder="story in a nutshell"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -128,7 +128,7 @@ export default function NewEntry() {
             </label>
             <textarea
               placeholder="share your thoughts"
-              className="textarea textarea-bordered textarea-accent w-full h-48"
+              className="textarea textarea-bordered textarea-accent w-full h-48 text-primary"
               value={impression}
               onChange={(e) => setImpression(e.target.value)}
               required

@@ -1,19 +1,19 @@
 import { useState, useMemo, useContext } from "react";
-import { EntriesContext } from "../context/EntriesContext"; // Import Context
+import { EntriesContext } from "../context/EntriesContext";
 
-// --- Date Utility Functions (Keep as is) ---
+// date util (keep as is!)
 const getStartOfWeek = () => {
   const now = new Date();
   const day = now.getDay(); // 0 for Sunday, 6 for Saturday
-  const diff = now.getDate() - day; // Adjust date to Sunday
+  const diff = now.getDate() - day; // adjusted date to Sunday
   const start = new Date(now.setDate(diff));
-  start.setHours(0, 0, 0, 0); // Set time to start of day
+  start.setHours(0, 0, 0, 0);
   return start;
 };
 
 const getStartOfLastWeek = () => {
   const startOfThisWeek = getStartOfWeek();
-  // Subtract 7 days (7 * 24 * 60 * 60 * 1000 milliseconds)
+
   const lastWeekTimestamp = startOfThisWeek.getTime() - 7 * 24 * 60 * 60 * 1000;
   return new Date(lastWeekTimestamp);
 };
@@ -21,19 +21,19 @@ const getStartOfLastWeek = () => {
 const getStartOfMonth = () => {
   const now = new Date();
   const start = new Date(now.getFullYear(), now.getMonth(), 1);
-  start.setHours(0, 0, 0, 0); // Set time to start of day
+  start.setHours(0, 0, 0, 0);
   return start;
 };
 
 const getStartOfLastMonth = () => {
   const now = new Date();
-  // Go to the first day of the current month, then subtract one month
+  // going to the first day of the current month, then subtract one month
   const start = new Date(now.getFullYear(), now.getMonth() - 1, 1);
   start.setHours(0, 0, 0, 0); // Set time to start of day
   return start;
 };
 
-// Mock component for a single diary entry item
+// Mock component for a single diary entry item / edited: seems good?! I guess...
 // REFAC: Added 'id' and 'updateEntry', removed internal 'liked' state, uses 'isGoodDay' directly.
 const EntryItem = ({ id, title, date, isGoodDay, index, updateEntry }) => {
   // using us format to display the day item in bigger font / whole app is in english tho'
@@ -54,14 +54,14 @@ const EntryItem = ({ id, title, date, isGoodDay, index, updateEntry }) => {
     </span>
   );
 
-  // Handler for the like/unlike button
+  // like/unlike btn handler
   const handleLikeToggle = () => {
-    // Call the context function to update the entry's isGoodDay state
+    // context function to update the entry's isGoodDay state
     updateEntry(id, { isGoodDay: !isGoodDay });
   };
 
   return (
-    // Replaced 'bg-white/70' with 'bg-base-100/70' for theme adaptation
+    // REFAC (AGAIN!!!!): Replaced 'bg-white/70' with 'bg-base-100/70' for theme adaptation
     <li className="p-4 bg-base-100/70 backdrop-blur-sm rounded-xl shadow-md hover:shadow-lg blur-[2.5px] hover:blur-none transition-all duration-450 flex items-start justify-between border-l-4 border-primary/50 mb-3">
       {/* Date and Index (Left Side) */}
       <div className="flex flex-col items-center justify-center w-16 h-full text-center pr-4 border-r border-base-300 mr-4">
@@ -123,7 +123,7 @@ const TimelineIcon = ({ isGoodDay }) => (
 );
 
 export default function Entries() {
-  // 1. Consume the entries state and the new updateEntry function from context
+  // consuming the entries state and the new updateEntry function from context
   const { entries: allEntries, updateEntry } = useContext(EntriesContext);
 
   // State is an array to hold multiple active filters (e.g., ['liked', 'lastWeek'])
@@ -162,7 +162,7 @@ export default function Entries() {
 
   // REFACTORED FILTERING LOGIC
   const filteredEntries = useMemo(() => {
-    // 2. Use allEntries from Context instead of mockEntries
+    // using now all entries
     if (activeFilters.length === 0) {
       return allEntries.map((entry) => ({
         ...entry,
@@ -175,19 +175,15 @@ export default function Entries() {
       timestamp: new Date(entry.date).getTime(),
     }));
 
-    // Get time boundaries
     const todayTimestamp = new Date().getTime();
-
-    // Boundaries for "This Week/Month" (end boundary for "Last Week/Month")
     const startOfThisWeekTimestamp = getStartOfWeek().getTime();
     const startOfThisMonthTimestamp = getStartOfMonth().getTime();
 
-    // Boundaries for "Last Week/Month"
     const startOfLastWeekTimestamp = getStartOfLastWeek().getTime();
     const startOfLastMonthTimestamp = getStartOfLastMonth().getTime();
 
     return entriesWithTimestamp.filter((entry) => {
-      // An entry must pass ALL active filters (AND logic)
+      // only all filter - entries (!!) will be returned
       return activeFilters.every((filter) => {
         switch (filter) {
           case "liked":
@@ -226,7 +222,7 @@ export default function Entries() {
         }
       });
     });
-    // 3. Add allEntries to dependencies
+    // entries as deps
   }, [activeFilters, allEntries]);
 
   // Sort entries by date (ascending) for the timeline visualization
@@ -240,7 +236,6 @@ export default function Entries() {
   );
 
   return (
-    // Set default text color to base-content
     <div className="p-4 md:p-8 text-base-content">
       <h2 className="text-3xl font-serif text-primary mb-8 border-b border-primary/20 pb-2">
         my personal timeline
@@ -249,7 +244,7 @@ export default function Entries() {
         time to remember your thoughts, ideas, and feelings
       </p>
 
-      {/* --- Filter and Sort Section - Clean Capsule Style --- */}
+      {/* --- Start of Section: Filter and Sort Section - Clean Capsule Style *whoop whoop* */}
       <div className="flex flex-wrap gap-2 justify-center p-4 bg-base-300/60 rounded-2xl shadow-inner mt-4 mb-8">
         <span className="text-sm font-semibold mr-2 self-center text-accent hidden sm:inline">
           Filter by
@@ -291,7 +286,7 @@ export default function Entries() {
           Good Days 🎉
         </button>
       </div>
-      {/* --- END Filter Section --- */}
+      {/* --- END of Filter Section --- */}
 
       {/* --- Dynamic Timeline Section --- */}
       <ul className="timeline timeline-vertical">
@@ -311,8 +306,8 @@ export default function Entries() {
               <div
                 className={
                   isStart
-                    ? "timeline-start timeline-box bg-base-200/70 shadow-md text-sm font-medium p-3 hover:bg-base-300 transition-colors cursor-pointer"
-                    : "timeline-end timeline-box bg-base-200/70 shadow-md text-sm font-medium p-3 hover:bg-base-300 transition-colors cursor-pointer"
+                    ? "timeline-start timeline-box bg-base-200/70 shadow-md text-sm font-medium p-3 hover:bg-base-300 hover:text-info transition-colors cursor-pointer"
+                    : "timeline-end timeline-box bg-base-200/70 shadow-md text-sm font-medium p-3 hover:bg-base-300 hover:text-info transition-colors cursor-pointer"
                 }
               >
                 {/* Text is now base-content by default */}
