@@ -129,7 +129,7 @@ export default function Entries() {
   // State is an array to hold multiple active filters (e.g., ['liked', 'lastWeek'])
   const [activeFilters, setActiveFilters] = useState([]);
 
-  // Handler to toggle filters
+  // toggle filters handler
   const handleFilterClick = (filterName) => {
     setActiveFilters((prevFilters) => {
       // If the filter is 'all', always set the array to empty, effectively selecting 'all'
