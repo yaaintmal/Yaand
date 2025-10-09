@@ -9,7 +9,7 @@ A simple, personal, and offline-first journaling application which works in your
 ### This single-page application (SPA) lets you record and review your daily experiences securely in your browser.
 
  - 🔐 Secure & Private: All data is saved directly to your browser's Local Storage—no cloud or accounts required.
- - ⌛ Quick Entry: Easily log new entries with a title, a mood toggle (Good Day / Not So Good Day), and detailed impressions.
+ - ⌛ Quick Entry: Easily log new entries with a title, a mood toggle (Good Day ❤️ / Not So Good Day 😔), and detailed impressions.
  - 📲 Intuitive Navigation: Use the floating menu for quick access to the Home, New Entry, and All Entries pages.
  - 🔍 Filtering: Review your entire history and filter entries by time period (Week, Month) and mood.
 
