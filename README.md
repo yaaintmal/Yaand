@@ -1,4 +1,4 @@
-# Yaand!App 
+# Yaand! App 
 #### (Yet another absolutely !necessary diary)
 
 A simple, personal, and offline-first journaling application built with React. Keep track of your daily thoughts and impressions right in your browser.
