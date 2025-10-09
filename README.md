@@ -23,7 +23,7 @@ A simple, personal, and offline-first journaling application which works in your
  - Persistence: Browser Local Storage
 
 
-🚀 Getting Started
+## 🚀 Getting Started
 
    Clone the repository:
 
@@ -39,3 +39,9 @@ A simple, personal, and offline-first journaling application which works in your
     npm run dev
 
    The app should run on http://localhost:5173.
+
+   
+   ## 🎯 upcoming changes
+
+   - additional details page/ modal for entries
+   - alternative backend-options
