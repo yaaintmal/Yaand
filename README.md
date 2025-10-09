@@ -25,17 +25,17 @@ A simple, personal, and offline-first journaling application which works in your
 
 🚀 Getting Started
 
-    Clone the repository:
+   Clone the repository:
 
-    git clone [YOUR-REPO-URL]
+    git clone git@github.com:yaaintmal/ma-lil-diary.git
     cd my-lil-diary-app
 
-    Install dependencies:
+   Install dependencies:
 
     npm install
 
-    Run locally:
+   Run locally:
 
     npm run dev
 
-    The app runs on http://localhost:5173.
+   The app should run on http://localhost:5173.
