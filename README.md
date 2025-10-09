@@ -21,3 +21,21 @@ A simple, personal, and offline-first journaling application which works in your
  - State Management: React Context API
  - Styling: Tailwind CSS / DaisyUI
  - Persistence: Browser Local Storage
+
+
+🚀 Getting Started
+
+    Clone the repository:
+
+    git clone [YOUR-REPO-URL]
+    cd my-lil-diary-app
+
+    Install dependencies:
+
+    npm install
+
+    Run locally:
+
+    npm run dev
+
+    The app runs on http://localhost:5173.
